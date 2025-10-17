@@ -8,7 +8,6 @@ BasicTerminal::BasicTerminal(){
     root->parent = nullptr;
 
     cwd = root;
-    std::cout<<cwd<<root<<'\n';
 }
 
 int BasicTerminal::binarySearch(const std::vector<Node*>& arr, const std::string& target){
@@ -24,7 +23,7 @@ int BasicTerminal::binarySearch(const std::vector<Node*>& arr, const std::string
         if(mid >= 1 && target < arr[mid]->name && target > arr[mid-1]->name){
             return mid;
         }
-        else if(mid == arr.size() - 1 && target > arr[mid-1]->name){
+        else if(mid == arr.size() - 1 && target > arr[mid]->name){
             return mid + 1;
         }
 
@@ -60,6 +59,41 @@ std::vector<std::string> BasicTerminal::splitPath(const std::string& path){
 }
 
 
+void BasicTerminal::pathTraverser(const std::string& path, bool removeFile){
+    std::vector<std::string>pathComponents = splitPath(path);
+    if(removeFile){
+        pathComponents.pop_back(); //remove file if applicable
+    }
+    
+    for(auto& component: pathComponents){
+        if(component == "."){
+            continue;
+        }
+        else if(component == ".."){
+            if(cwd == root){
+                continue;
+            }
+            cwd = cwd->parent;
+        }
+        else{
+            int index = -1;
+            for(int i = 0; i < cwd->children.size(); i++){
+                Node* child = cwd->children[i];
+                if(child->isDirectory && child->name == "/" + component){
+                    index = i;
+                }
+            }
+            if(index == -1){
+                std::cout<<"Path Does Not Exist\n";
+                return;
+            }
+
+            cwd = cwd->children[index];
+        }
+    }
+}
+
+
 //return list of files in sorted order with directories first
 void BasicTerminal::ls(){
     std::vector<std::string>tmp;
@@ -90,8 +124,11 @@ void BasicTerminal::mkdir(std::string dirName){
     cwd->children.insert(cwd->children.begin() + insertIndex, newDir);
 }
 
-void BasicTerminal::touch(std::string name){
-    int insertIndex = binarySearch(cwd->children, name);
+void BasicTerminal::touch(std::string path){
+    Node* originalDir = cwd;
+    pathTraverser(path, true);
+    std::string fileName = splitPath(path).back();
+    int insertIndex = binarySearch(cwd->children, fileName);
 
     if(insertIndex == -1){
         std::cout<<"File Already Exists"<<std::endl;
@@ -99,11 +136,12 @@ void BasicTerminal::touch(std::string name){
     }
 
     Node* newDir = new Node();
-    newDir->name = name;
+    newDir->name = fileName;
     newDir->isDirectory = false;
     newDir->parent = cwd;
 
     cwd->children.insert(cwd->children.begin() + insertIndex, newDir);
+    cwd = originalDir;
 }
 
 void BasicTerminal::pwd(){
@@ -127,23 +165,7 @@ void BasicTerminal::pwd(){
 }
 
 void BasicTerminal::cd(std::string path){
-    std::vector<std::string>pathComponents = splitPath(path);
-
-    for(auto& component: pathComponents){
-        int index = -1;;
-        for(int i = 0; i < cwd->children.size(); i++){
-            Node* child = cwd->children[i];
-            if(child->isDirectory && child->name == "/" + component){
-                index = i;
-            }
-        }
-        if(index == -1){
-            std::cout<<"Path Does Not Exist\n";
-            return;
-        }
-
-        cwd = cwd->children[index];
-    }
+    pathTraverser(path, false);
 }
 
 void BasicTerminal::cat(std::string name){
@@ -153,7 +175,7 @@ void BasicTerminal::cat(std::string name){
             index = i;
         }
     }
-    
+
     for(auto& line: cwd->children[index]->data){
         std::cout<<line<<'\n';
     }

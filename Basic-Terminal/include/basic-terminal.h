@@ -26,7 +26,7 @@ class BasicTerminal{
 
         int binarySearch(const std::vector<Node*>& arr, const std::string& target);
         std::vector<std::string> splitPath(const std::string& path);
-        void pathTraverser(const std::string path);
+        void pathTraverser(const std::string& path, bool removeFile);
 
         Node* root;
         Node* cwd;

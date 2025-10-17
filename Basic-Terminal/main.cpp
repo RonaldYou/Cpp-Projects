@@ -11,10 +11,15 @@ int main(){
     linux.mkdir("zebra");
     linux.touch("airplane.txt");
     linux.ls();
+
     linux.cd("cow");
     linux.mkdir("legs");
-    linux.cd("legs");
-    linux.mkdir("hind legs");
+    linux.cd("..");
+    linux.touch("/cow/legs/thigh.txt");
+
+    linux.cd("/cow/legs");
+    linux.mkdir("hind_legs");
+    linux.mkdir("zad");
     linux.ls();
     linux.pwd();
 
