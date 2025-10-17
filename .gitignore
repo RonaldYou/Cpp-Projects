@@ -42,4 +42,4 @@
 
 
 # any build directories
-/build*/
+*/build*/

@@ -1,0 +1,69 @@
+#include "basic-terminal.h"
+
+
+int main(){
+    BasicTerminal linux = BasicTerminal();
+
+    linux.mkdir("cow");
+    linux.mkdir("rocket");
+    linux.mkdir("pig");
+    linux.mkdir("door");
+    linux.mkdir("zebra");
+    linux.touch("airplane.txt");
+    linux.ls();
+    linux.cd("cow");
+    linux.mkdir("legs");
+    linux.cd("legs");
+    linux.mkdir("hind legs");
+    linux.ls();
+    linux.pwd();
+
+    return 0;
+}
+
+/*
+Example file system:
+
+/
+|
+| _ _  Doc
+|       |
+|       | - - Animals
+|       
+|
+|
+|
+|
+| - - Desktop
+
+
+
+
+Commands:
+
+1. ls:
+
+    \directory1 \directory2 files1 files2 ...
+
+
+
+
+
+1. ls:
+
+    ls   --> immediate directory
+
+    ls Doc/Anmals --> further down
+
+    In directory Doc
+
+    ls /Desktop --> absolute
+
+
+
+
+
+
+
+
+*/
