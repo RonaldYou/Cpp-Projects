@@ -60,6 +60,9 @@ std::vector<std::string> BasicTerminal::splitPath(const std::string& path){
 
 
 void BasicTerminal::pathTraverser(const std::string& path, bool removeFile){
+    if(path[0] == '/'){
+        cwd = root;
+    }
     std::vector<std::string>pathComponents = splitPath(path);
     if(removeFile){
         pathComponents.pop_back(); //remove file if applicable
@@ -108,7 +111,10 @@ void BasicTerminal::ls(){
     std::cout << std::endl;
 }
 
-void BasicTerminal::mkdir(std::string dirName){
+void BasicTerminal::mkdir(std::string path){
+    Node* originalDir = cwd;
+    pathTraverser(path, true);
+    std::string dirName = splitPath(path).back();
     int insertIndex = binarySearch(cwd->children, "/" + dirName);
 
     if(insertIndex == -1){
@@ -122,6 +128,7 @@ void BasicTerminal::mkdir(std::string dirName){
     newDir->parent = cwd;
 
     cwd->children.insert(cwd->children.begin() + insertIndex, newDir);
+    cwd = originalDir;
 }
 
 void BasicTerminal::touch(std::string path){

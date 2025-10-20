@@ -15,16 +15,56 @@ int main(){
     linux.cd("cow");
     linux.mkdir("legs");
     linux.cd("..");
-    linux.touch("/cow/legs/thigh.txt");
+    linux.touch("cow/legs/thigh.txt");
 
-    linux.cd("/cow/legs");
+    linux.cd("cow/legs");
     linux.mkdir("hind_legs");
     linux.mkdir("zad");
     linux.ls();
     linux.pwd();
 
+    linux.mkdir("/rocket/spaceX");
+    linux.mkdir("/rocket/NASA");
+    linux.cd("/rocket");
+    linux.ls();
+    linux.pwd();
+
     return 0;
 }
+
+/* TEST */
+
+/*
+
+/
+|
+| _ _  /cow
+|       |
+|       | - - /legs
+|               |
+|               | - - /hind_legs
+|               | - - /zad
+|               | - - thigh.txt
+|       
+| - - /rocket
+|
+|
+| - - /pig
+|
+| - - /door
+|
+| - - /zebra
+|
+| - - airplane.txt
+
+
+*/
+
+
+
+
+
+
 
 /*
 Example file system:
